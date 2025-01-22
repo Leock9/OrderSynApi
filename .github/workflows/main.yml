@@ -97,7 +97,7 @@ jobs:
       # Build e tag da imagem Docker para a API
       - name: Build and tag Docker image for API
         run: |
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ordersyncapi:v1 .
+          docker build -f OrderSyncApi/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ordersyncapi:v1 OrderSyncApi
       #OrderSyncApi/Dockerfile
       # Login no Docker Hub
       - name: Login to Docker Hub
