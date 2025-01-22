@@ -102,7 +102,7 @@ jobs:
   
       - name: Build and tag Docker image for API
         run: |
-          docker build -f OrderSynApi/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ordersyncapi:v1 .
+          docker build -f ./OrderSyncApi/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ordersyncapi:v1 .
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
