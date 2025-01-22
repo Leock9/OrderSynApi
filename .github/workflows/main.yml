@@ -96,7 +96,10 @@ jobs:
 
       - name: Print current directory
         run: pwd
-        
+
+      - name: List all directories
+        run: ls -R
+  
       - name: Build and tag Docker image for API
         run: |
           docker build -f OrderSynApi/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ordersyncapi:v1 .
