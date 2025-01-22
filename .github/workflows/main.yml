@@ -55,8 +55,8 @@ jobs:
       # Executar testes com cobertura de código
       - name: Run tests with coverage
         run: |
-           dotnet test OrderSyncApi.Tests.csproj --no-build --collect:"XPlat Code Coverage
-#C:\Repos\OrderSynApi\OrderSyncApi.Tests
+           dotnet test OrderSyncApi.Tests/OrderSyncApi.Tests.csproj --no-build  --configuration Release --collect:"XPlat Code Coverage
+#OrderSyncApi.Tests/OrderSyncApi.Tests.csproj
       # Converter cobertura para XML
       - name: Convert coverage to XML
         run: |
