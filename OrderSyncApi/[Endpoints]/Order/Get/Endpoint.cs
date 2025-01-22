@@ -1,35 +1,33 @@
 ﻿using System.Net;
 using FastEndpoints;
 using FluentValidation;
-using OrderSyncApi.Core.Application.UseCases.FileSync;
+using OrderSyncApi._Endpoints_.Order.Sync;
+using OrderSyncApi.Core.Application.UseCases.GetFile;
 
-namespace OrderSyncApi._Endpoints_.Order.Sync;
+namespace OrderSyncApi._Endpoints_.Order.Get;
 
 internal sealed class Endpoint : Endpoint<Request, Response>
 {
-    public IFileSyncUseCase _FileSyncUseCase { get; set; }
+    public IGetFileUseCase _getFileUseCase { get; set; }
 
     public override void Configure()
     {
-        Post("/file/sync");
-        Options(o => o.WithName("FileSyncEndpoint"));
-        AllowFileUploads();
-        
-        Throttle(
-            hitLimit: 120,
-            durationSeconds: 60
-        );
+        Get("/file");
+        Options(o => o.WithName("GetFileEndpoint"));
     }
 
     public override async Task HandleAsync(Request r, CancellationToken c)
     {
         try
         {
-            var response = await _FileSyncUseCase.HandleAsync
+            DateOnly? startDate = DateOnly.TryParse(r.StartDate, out var parsedStartDate) ? parsedStartDate : null;
+            DateOnly? endDate = DateOnly.TryParse(r.EndDate, out var parsedEndDate) ? parsedEndDate : null;
+
+            var response = await _getFileUseCase.HandleAsync
             (
-                new FileSyncInput(r.File!),
+                new GetFileInput(r.FileName!, r.OrderId, startDate, endDate),
                 c);
-            await SendOkAsync(new Response { FileSyncOutput = response });
+            await SendOkAsync(new Response { GetFileOutput = response });
         }
         catch (ValidationException vx)
         {

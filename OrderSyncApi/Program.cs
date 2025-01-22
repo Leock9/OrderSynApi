@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FastEndpoints.Swagger;
-using OrderSyncApi.Core.Application.UseCases.OrderSync;
+using OrderSyncApi.Core.Application.UseCases.FileSync;
+using OrderSyncApi.Core.Application.UseCases.GetFile;
 using OrderSyncApi.Infrastructure.Gateways.Redis;
 using OrderSyncApi.Infrastructure.Services;
 using StackExchange.Redis;
@@ -33,7 +34,8 @@ builder.Services.AddCors(options =>
 });
 
 // Register services
-builder.Services.AddScoped<IOrderSyncUseCase, OrderSyncUseCase>();
+builder.Services.AddScoped<IFileSyncUseCase, FileSyncUseCase>();
+builder.Services.AddScoped<IGetFileUseCase, GetFileUseCase>();
 
 builder.Services.AddScoped<ILineParser, LineParser>();
 builder.Services.AddScoped<IBatchService, BatchService>();

@@ -1,8 +1,8 @@
 ﻿using OrderSyncApi.Core.Domain.Entity;
 
-namespace OrderSyncApi.Core.Application.UseCases.OrderSync;
+namespace OrderSyncApi.Core.Application.UseCases.GetFile;
 
-public class OrderSyncOutput
+public class GetFileOutput
 {
     public IList<User> Users { get; init; } = null!;
 }
