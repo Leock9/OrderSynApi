@@ -3,6 +3,8 @@
 A OrderSyncApi é uma API construída em .NET 8 para sincronização e processamento de pedidos. Ela utiliza o Redis para armazenar informações, como arquivos enviados, e suporta execução local com contêineres Docker.
 
 [![.NET 8 Build, Docker Build](https://github.com/Leock9/OrderSynApi/actions/workflows/main.yml/badge.svg)](https://github.com/Leock9/OrderSynApi/actions/workflows/main.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Leock9_OrderSynApi&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Leock9_OrderSynApi)
+
 
 ## **Sumário**
 - [Visão Geral](#visão-geral)
