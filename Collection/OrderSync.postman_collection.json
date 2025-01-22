@@ -1,0 +1,218 @@
+{
+	"info": {
+		"_postman_id": "7ad5e139-b560-42bb-bc88-19a75915b0b8",
+		"name": "OrderSync",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36749327"
+	},
+	"item": [
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Sync Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/LeonardoCarvalhoKhou/OneDrive - Bravium SA/Documents/Lulu/data_2.txt"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/order/sync?orderId=15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"order",
+								"sync"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "15",
+									"description": "inteiro"
+								},
+								{
+									"key": "startDate",
+									"value": null,
+									"description": "Apenas a data",
+									"disabled": true
+								},
+								{
+									"key": "endDate",
+									"value": null,
+									"description": "Apenas a data",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Sync Order with order id",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/LeonardoCarvalhoKhou/OneDrive - Bravium SA/Documents/Lulu/data_2.txt"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:5000/order/sync?orderId=15",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"order",
+										"sync"
+									],
+									"query": [
+										{
+											"key": "orderId",
+											"value": "15",
+											"description": "inteiro"
+										},
+										{
+											"key": "startDate",
+											"value": null,
+											"description": "Apenas a data",
+											"disabled": true
+										},
+										{
+											"key": "endDate",
+											"value": null,
+											"description": "Apenas a data",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Sync Order with data",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/LeonardoCarvalhoKhou/OneDrive - Bravium SA/Documents/Lulu/data_2.txt"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:5000/order/sync?startDate=2021/09/09&endDate=2021/09/09",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"order",
+										"sync"
+									],
+									"query": [
+										{
+											"key": "orderId",
+											"value": "15",
+											"description": "inteiro",
+											"disabled": true
+										},
+										{
+											"key": "startDate",
+											"value": "2021/09/09",
+											"description": "Apenas a data"
+										},
+										{
+											"key": "endDate",
+											"value": "2021/09/09",
+											"description": "Apenas a data"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Sync Order with data and order id",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/LeonardoCarvalhoKhou/OneDrive - Bravium SA/Documents/Lulu/data_2.txt"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:5000/order/sync?orderId=88&startDate=2021/09/09&endDate=2021/09/09",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"order",
+										"sync"
+									],
+									"query": [
+										{
+											"key": "orderId",
+											"value": "88",
+											"description": "inteiro"
+										},
+										{
+											"key": "startDate",
+											"value": "2021/09/09",
+											"description": "Apenas a data"
+										},
+										{
+											"key": "endDate",
+											"value": "2021/09/09",
+											"description": "Apenas a data"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		}
+	]
+}

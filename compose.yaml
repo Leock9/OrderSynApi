@@ -1,0 +1,32 @@
+﻿services:
+  ordersyncapi:
+    build:
+      context: .
+      dockerfile: OrderSyncApi/Dockerfile
+    ports: 
+      - 5000:8080
+    depends_on:
+      - redis
+      
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379" # Porta padrão do Redis
+    command: [ "redis-server", "--appendonly", "yes" ] # Configura Redis com persistência
+    volumes:
+      - redis_data:/data
+  
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      - redis
+
+volumes:
+  redis_data:
+    driver: local
