@@ -17,7 +17,8 @@ A OrderSyncApi é uma API construída em .NET 8 para sincronização e processam
 ## **Visão Geral**
 
 ### Recursos Principais da API
-- Processamento de arquivos com filtros opcionais (ID de pedido, intervalo de datas).
+- Endpoint processamento de arquivos
+- Endpoint com filtros opcionais (ID de pedido, intervalo de datas).
 - Validação de dados com regras personalizadas usando FluentValidation.
 - Armazenamento de arquivos e seus conteúdos no Redis.
 - Construção modular com FastEndpoints para endpoints rápidos e organizados.
@@ -36,7 +37,7 @@ A OrderSyncApi é uma API construída em .NET 8 para sincronização e processam
 - Testes de Integração: Testes automatizados para garantir a integridade da aplicação.
 - Autenticação e Autorização: Implementação de autenticação JWT para proteger os endpoints.
 - Colisão Chaves Redis: Implementação de um sistema de geração de chaves único para evitar colisões.
-- Ver nescessidade de processo assincrono.
+- Processo assincrono, justificado com testes do k6.
 ---
 
 ## **Tecnologias Utilizadas**
