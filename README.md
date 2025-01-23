@@ -35,7 +35,7 @@ A OrderSyncApi é uma API construída em .NET 8 para sincronização e processam
 - Testes de Integração: Testes automatizados para garantir a integridade da aplicação.
 - Autenticação e Autorização: Implementação de autenticação JWT para proteger os endpoints.
 - Colisão Chaves Redis: Implementação de um sistema de geração de chaves único para evitar colisões.
-- Endpoint infringindo o princípio da responsabilidade única: Separação do endpoint de processamento de arquivos e consulta de dados com filtros.
+- Ver nescessidade de processo assincrono.
 ---
 
 ## **Tecnologias Utilizadas**
