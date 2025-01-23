@@ -7,7 +7,7 @@
       - 8080:8080
     depends_on:
       - redis
-  
+
   redis:
     image: redis:latest
     container_name: redis
@@ -27,6 +27,14 @@
     depends_on:
       - redis
 
+  k6:
+    image: grafana/k6:latest
+    container_name: k6
+    entrypoint: ["k6", "run", "/scripts/stress-test.js"]
+    volumes:
+      - ./K6:/scripts # Ajuste para refletir sua estrutura
+    depends_on:
+      - ordersyncapi
 
 volumes:
   redis_data:

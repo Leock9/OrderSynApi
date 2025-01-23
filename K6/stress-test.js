@@ -2,14 +2,6 @@ import http from 'k6/http';
 import { check, group, sleep } from 'k6';
 import { SharedArray } from 'k6/data';
 
-// Carregar dados para o teste
-const usersData = new SharedArray('users data', function() {
-    return [
-        { userId: 1, name: "John Doe" },
-        { userId: 2, name: "Jane Doe" }
-    ]; // Exemplo de dados, adapte conforme necessário
-});
-
 export let options = {
     stages: [
         { duration: '30s', target: 10 }, // 10 usuários em 30 segundos
@@ -35,18 +27,40 @@ export default function () {
     // });
 
     group('Get File Endpoint Test', function () {
-        const params = {
-            params: {
-                fileName: 'data_1',
-            }
-        };
+        const url = 'http://ordersyncapi:8080/file?fileName=data_1';
+        let fileGetResponse;
 
-        const fileGetResponse = http.get('https://localhost:8080/file', params);
+        try {
+            fileGetResponse = http.get(url);
+        } catch (error) {
+            console.error(`Failed to send request to ${url}: ${error.message}`);
+            return; // Aborta o teste caso não consiga enviar a requisição.
+        }
 
-        check(fileGetResponse, {
+        // Verifica se a resposta é válida antes de realizar as validações.
+        if (!fileGetResponse || !fileGetResponse.body) {
+            console.error(`Response from ${url} is null or has no body.`);
+            return; // Aborta o teste, já que não há dados para validar.
+        }
+
+        // Aplica as validações sobre a resposta.
+        const validationResult = check(fileGetResponse, {
             'is status 200': (r) => r.status === 200,
-            'contains users': (r) => r.json('getFileOutput').users.length > 0,
+            'contains getFileOutput': (r) => !!r.json('getFileOutput'),
+            'contains users': (r) => {
+                const output = r.json('getFileOutput');
+                return output && Array.isArray(output.users) && output.users.length > 0;
+            },
         });
+
+        if (fileGetResponse.status !== 200) {
+            console.error('Request failed with status:', fileGetResponse.status);
+        }
+
+        // Loga o erro caso alguma validação falhe.
+        if (!validationResult) {
+            console.error(`Validation failed for response: ${fileGetResponse.body}`);
+        }
 
         sleep(1);
     });

@@ -10,7 +10,8 @@ A OrderSyncApi é uma API construída em .NET 8 para sincronização e processam
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Como Executar](#como-executar)
     - [Rodando via Docker Compose](#rodando-via-docker-compose)
-- [DockerHub](https://hub.docker.com/r/lkhouri/calcapi)
+- [DockerHub]()
+- [Testes de Estresse](#testes-de-estresse)
 ---
 
 ## **Visão Geral**
@@ -75,3 +76,61 @@ A imagem da aplicação está disponível no DockerHub, para baixar a imagem exe
 ```bash
 docker pull lkhouri/ordersyncapi
 ```
+## **Testes de Estresse K6**
+
+Os testes de estresse foram realizados com o K6, junto ao docker-compose
+
+Endpoint de teste:
+
+## Get File
+
+### Estratégia de Carga do Teste
+
+### 1. VUs (Usuários Virtuais):
+- O teste foi executado com **2 usuários virtuais** inicialmente.
+- O número máximo de **100 usuários virtuais** foi configurado, escalando a carga para até 100 VUs.
+
+### 2. Taxa de Requisições:
+- Durante a execução, a carga foi ajustada para realizar aproximadamente **40.79 requisições por segundo (RPS)**.
+
+### 3. Duração:
+- O teste foi executado por **2 minutos (2m00.4s)**.
+
+### 4. Iterações:
+- Foram realizadas **4911 iterações**, com cada VU executando um número de requisições durante o teste.
+
+### Pontos a Considerar:
+- **Pico de Usuários Virtuais**: O teste atingiu um pico de **100 usuários virtuais**, indicando uma carga considerável.
+- **Porcentagem de Falhas**: A falha foi **0%**, com todas as requisições completando com sucesso.
+- **Distribuição da Duração das Requisições**: As requisições duraram entre 2.93ms e 279.32ms, com uma média de **6.17ms**, sugerindo um comportamento de latência relativamente baixo.
+
+### Conclusão:
+A estratégia de carga adotada envolveu um teste de stress, com aumento gradual da carga até atingir 100 usuários virtuais, realizando 40 a 63 requisições por segundo. O tempo de execução foi de aproximadamente 2 minutos, com um alto nível de sucesso nas requisições e sem falhas.
+
+
+| **Métrica**                                 | **Valor**                                                        |
+| ------------------------------------------- | ---------------------------------------------------------------- |
+| **Status HTTP**                             | 200 (OK)                                                         |
+| **Contém getFileOutput**                    | Sim                                                              |
+| **Contém usuários**                         | Sim                                                              |
+| **Taxa de sucesso das verificações**        | 100,00% (14733 de 14733)                                         |
+| **Dados recebidos**                         | 720 MB (6.0 MB/s)                                                |
+| **Dados enviados**                          | 506 kB (4.2 kB/s)                                                |
+| **Duração do Grupo de Testes**              | Média: 1,01s, Mínimo: 1s, Máximo: 1,45s                          |
+| **Tempo de Bloqueio da Requisição HTTP**    | Média: 75,97µs, Máximo: 263,5ms                                  |
+| **Tempo de Conexão HTTP**                   | Média: 67,55µs, Máximo: 263,41ms                                 |
+| **Duração da Requisição HTTP**              | Média: 6,17ms, Máximo: 279,32ms                                  |
+| **Falhas nas Requisições HTTP**             | 0,00% (0 de 4911 falharam)                                       |
+| **Tempo de Recebimento de Requisição HTTP** | Média: 1,44ms, Máximo: 135,11ms                                  |
+| **Tempo de Envio de Requisição HTTP**       | Média: 27,22µs, Máximo: 10,09ms                                  |
+| **Tempo de Handshake TLS**                  | 0s                                                               |
+| **Tempo de Espera na Requisição HTTP**      | Média: 4,7ms, Máximo: 279,2ms                                    |
+| **Total de requisições HTTP**               | 4911                                                             |
+| **Taxa de requisições HTTP**                | 40,79 requisições/s                                              |
+| **Duração da Iteração**                     | Média: 1,01s, Mínimo: 1s, Máximo: 1,45s                          |
+| **Total de iterações**                      | 4911                                                             |
+| **Taxa de iterações**                       | 40,79 iterações/s                                                |
+| **VUs (usuários virtuais)**                 | Mínimo: 1, Máximo: 100                                           |
+| **Máximo de VUs**                           | 100                                                              |
+| **Status Final**                            | Executando por 2m00.4s, 4911 iterações completas, 0 interrupções |
+
