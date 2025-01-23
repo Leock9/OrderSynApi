@@ -3,11 +3,11 @@
     build:
       context: .
       dockerfile: OrderSyncApi/Dockerfile
-    ports: 
+    ports:
       - 8080:8080
     depends_on:
       - redis
-      
+  
   redis:
     image: redis:latest
     container_name: redis
@@ -26,6 +26,7 @@
       - REDIS_HOSTS=local:redis:6379
     depends_on:
       - redis
+
 
 volumes:
   redis_data:

@@ -1,0 +1,1 @@
+﻿docker run -i -v $(pwd):/scripts -e loadimpact/k6 run /scripts/stress-test.js -file /scripts/file-to-upload.txt
