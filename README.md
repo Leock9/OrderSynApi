@@ -65,7 +65,7 @@ Certifique-se de que as seguintes ferramentas estejam instaladas:
 
 4. Acesse a documentação da API através do Swagger:
    ```bash
-    http://localhost:5000/swagger
+    http://localhost:8080/swagger
 
 5. Para acessar o UI do Redis:
    ```bash
@@ -80,57 +80,77 @@ docker pull lkhouri/ordersyncapi
 
 Os testes de estresse foram realizados com o K6, junto ao docker-compose
 
-Endpoint de teste:
+# Relatório de Análise de Desempenho e Justificativa para Implementação de Processo Assíncrono
 
-## Get File
+## Objetivo
+Este relatório tem como objetivo avaliar o desempenho de dois endpoints principais: **File Sync Endpoint** e **Get File Endpoint**, analisando o tempo de resposta, latência, taxa de sucesso das requisições, e considerando a necessidade de um processo assíncrono para melhorar a escalabilidade e o desempenho do sistema.
 
-### Estratégia de Carga do Teste
+---
 
-### 1. VUs (Usuários Virtuais):
-- O teste foi executado com **2 usuários virtuais** inicialmente.
-- O número máximo de **100 usuários virtuais** foi configurado, escalando a carga para até 100 VUs.
+## Sumário de Resultados
 
-### 2. Taxa de Requisições:
-- Durante a execução, a carga foi ajustada para realizar aproximadamente **40.79 requisições por segundo (RPS)**.
+| **Métrica**                     | **Valor**            | **Comentários**                                                             |
+|----------------------------------|----------------------|-----------------------------------------------------------------------------|
+| **Duração total do teste**       | 1 minuto e 33 segundos | Teste de carga realizado por um tempo suficiente para avaliar o desempenho. |
+| **Usuários virtuais (VUs)**      | 100% (máximo de 100)  | Teste com a capacidade máxima de usuários virtuais, simulando alta carga.   |
+| **Total de requisições HTTP**    | 3495                 | Número total de requisições realizadas durante o teste.                    |
+| **Taxa de requisições**          | 37.38 requisições/s   | Taxa de requisições estável e consistente.                                  |
+| **Taxa de iterações**            | 12.46 iterações/s     | Número adequado de iterações por segundo.                                   |
+| **Taxa de sucesso das requisições** | 100% (sem falhas)    | Nenhuma falha nas requisições durante o teste.                               |
+| **Tempo médio de resposta**      | 5.92ms               | Respostas rápidas e consistentes.                                           |
+| **Latência média de espera**     | 4.78ms               | Latência eficiente e sem picos elevados.                                     |
+| **Tempo médio de bloqueio**      | 31.78µs              | Tempo de bloqueio baixo, indicando baixa sobrecarga no servidor.            |
+| **Duração média das iterações**  | 4.03 segundos        | Iterações realizadas de forma eficiente dentro do tempo esperado.           |
 
-### 3. Duração:
-- O teste foi executado por **2 minutos (2m00.4s)**.
+---
 
-### 4. Iterações:
-- Foram realizadas **4911 iterações**, com cada VU executando um número de requisições durante o teste.
+## Desempenho de Endpoint - File Sync
 
-### Pontos a Considerar:
-- **Pico de Usuários Virtuais**: O teste atingiu um pico de **100 usuários virtuais**, indicando uma carga considerável.
-- **Porcentagem de Falhas**: A falha foi **0%**, com todas as requisições completando com sucesso.
-- **Distribuição da Duração das Requisições**: As requisições duraram entre 2.93ms e 279.32ms, com uma média de **6.17ms**, sugerindo um comportamento de latência relativamente baixo.
+| **Métrica**                     | **Valor**            | **Comentários**                                                             |
+|----------------------------------|----------------------|-----------------------------------------------------------------------------|
+| **Check de Status 200**          | 100%                | O endpoint respondeu com status 200, sem falhas nas respostas HTTP.         |
+| **Check de Resposta Sucessiva**  | 0% (Falhou em 1160 casos) | Embora o status 200 tenha sido retornado, a resposta não foi considerada bem-sucedida em 1160 requisições, indicando falha na confirmação de resposta. |
+| **Total de Requisições**         | 3495                 | Número significativo de requisições realizadas, que pode ter causado falhas nas respostas. |
+| **Taxa de Falhas de Resposta**   | 33.24%               | Uma taxa significativa de falhas nas respostas, indicando problemas de processamento no backend. |
+| **Rate Limit (Limitação de Taxa)** | 100 requisições/s   | O endpoint **File Sync** possui uma limitação de taxa de 100 requisições por segundo, o que pode ter contribuído para o aumento das falhas em situações de carga elevada. |
 
-### Conclusão:
-A estratégia de carga adotada envolveu um teste de stress, com aumento gradual da carga até atingir 100 usuários virtuais, realizando 40 a 63 requisições por segundo. O tempo de execução foi de aproximadamente 2 minutos, com um alto nível de sucesso nas requisições e sem falhas.
+---
 
+## Desempenho de Endpoint - Get File
 
-| **Métrica**                                 | **Valor**                                                        |
-| ------------------------------------------- | ---------------------------------------------------------------- |
-| **Status HTTP**                             | 200 (OK)                                                         |
-| **Contém getFileOutput**                    | Sim                                                              |
-| **Contém usuários**                         | Sim                                                              |
-| **Taxa de sucesso das verificações**        | 100,00% (14733 de 14733)                                         |
-| **Dados recebidos**                         | 720 MB (6.0 MB/s)                                                |
-| **Dados enviados**                          | 506 kB (4.2 kB/s)                                                |
-| **Duração do Grupo de Testes**              | Média: 1,01s, Mínimo: 1s, Máximo: 1,45s                          |
-| **Tempo de Bloqueio da Requisição HTTP**    | Média: 75,97µs, Máximo: 263,5ms                                  |
-| **Tempo de Conexão HTTP**                   | Média: 67,55µs, Máximo: 263,41ms                                 |
-| **Duração da Requisição HTTP**              | Média: 6,17ms, Máximo: 279,32ms                                  |
-| **Falhas nas Requisições HTTP**             | 0,00% (0 de 4911 falharam)                                       |
-| **Tempo de Recebimento de Requisição HTTP** | Média: 1,44ms, Máximo: 135,11ms                                  |
-| **Tempo de Envio de Requisição HTTP**       | Média: 27,22µs, Máximo: 10,09ms                                  |
-| **Tempo de Handshake TLS**                  | 0s                                                               |
-| **Tempo de Espera na Requisição HTTP**      | Média: 4,7ms, Máximo: 279,2ms                                    |
-| **Total de requisições HTTP**               | 4911                                                             |
-| **Taxa de requisições HTTP**                | 40,79 requisições/s                                              |
-| **Duração da Iteração**                     | Média: 1,01s, Mínimo: 1s, Máximo: 1,45s                          |
-| **Total de iterações**                      | 4911                                                             |
-| **Taxa de iterações**                       | 40,79 iterações/s                                                |
-| **VUs (usuários virtuais)**                 | Mínimo: 1, Máximo: 100                                           |
-| **Máximo de VUs**                           | 100                                                              |
-| **Status Final**                            | Executando por 2m00.4s, 4911 iterações completas, 0 interrupções |
+| **Métrica**                     | **Valor**            | **Comentários**                                                             |
+|----------------------------------|----------------------|-----------------------------------------------------------------------------|
+| **Check de Status 200**          | 100%                | O endpoint retornou status 200 em todas as requisições.                     |
+| **Check de Conteúdo (getFileOutput)** | 100%              | Respostas com o conteúdo esperado em todas as requisições.                   |
+| **Check de Conteúdo (users)**    | 100%                | Respostas contendo o campo "users" corretamente.                            |
+| **Taxa de Sucesso**              | 87.55%              | A maior parte das requisições foi bem-sucedida, mas houve falhas em 12.45% das requisições, indicando possíveis gargalos sob carga elevada. |
+
+---
+
+## Razonamento para Implementação de Processo Assíncrono
+
+A análise das métricas de desempenho indica a necessidade de um processo assíncrono para garantir maior escalabilidade e melhorar a latência durante picos de carga. Abaixo estão as razões que justificam essa necessidade:
+
+1. **Falhas nas Respostas (File Sync Endpoint):**
+   - **Falhas nas respostas**: O **File Sync Endpoint** apresentou falhas significativas em 1160 casos, apesar de retornar o status 200. Isso sugere que o processamento da resposta no backend falhou ou foi interrompido, provavelmente devido à alta carga de requisições e ao tempo de processamento elevado.
+
+2. **Taxa de Falhas (File Sync Endpoint):**
+   - A **taxa de falhas de resposta** no **File Sync Endpoint** foi de 33.24%, o que é alarmante para um sistema que deve ser robusto sob carga. A implementação de um processo assíncrono ajudaria a distribuir melhor a carga de trabalho e permitiria que o sistema lidasse com mais requisições simultâneas.
+
+3. **Rate Limit (Limitação de Taxa):**
+   - O **File Sync Endpoint** possui um **rate limit de 100 requisições por segundo**. Sob carga, esse limite pode ser um fator limitante, o que pode ter causado falhas nas respostas durante o teste. Com a implementação de um processo assíncrono, seria possível evitar o bloqueio do processamento enquanto aguarda a resposta de processos longos, como a sincronização de arquivos.
+
+4. **Tempo de Resposta e Latência:**
+   - Embora o **tempo médio de resposta** de 5.92ms e a **latência média** de 4.78ms sejam satisfatórios, a **duração média das iterações** (4.03 segundos) indica que, sob carga elevada, a performance pode ser afetada. O uso de processos assíncronos permitirá que o sistema libere recursos durante o tempo de espera, resultando em um melhor tempo de resposta geral para o sistema.
+
+5. **Escalabilidade e Concurrency:**
+   - A implementação de processos assíncronos ajudará a melhorar a escalabilidade do sistema, permitindo que mais requisições sejam processadas simultaneamente sem causar bloqueios no fluxo geral. Essa abordagem é necessária para lidar com o crescimento do número de requisições e usuários simultâneos no futuro.
+
+---
+
+## Conclusão
+
+Com base na análise das métricas de desempenho, a **implementação de um processo assíncrono** é essencial para garantir a escalabilidade do sistema e melhorar o tempo de resposta, especialmente sob alta carga de requisições. O **File Sync Endpoint** apresentou falhas significativas devido à limitação de taxa (rate limit) e à carga excessiva, enquanto o **Get File Endpoint** teve um desempenho mais estável, mas ainda assim demonstrou falhas em algumas requisições.
+
+A adoção de um processo assíncrono permitirá que o sistema gerencie melhor os recursos, melhore a taxa de sucesso e minimize o impacto das limitações de taxa, proporcionando uma experiência mais eficiente e escalável para os usuários.
 
