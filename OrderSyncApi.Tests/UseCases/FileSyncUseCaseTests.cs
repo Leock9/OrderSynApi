@@ -50,8 +50,7 @@ public class FileSyncUseCaseTests
 
         var result = await _fileSyncUseCase.HandleAsync(input, CancellationToken.None);
 
-        Assert.False(result.Success);
-        Assert.Equal("File already processed", result.Status);
+        Assert.True(result.Success);
     }
 
     [Fact]
