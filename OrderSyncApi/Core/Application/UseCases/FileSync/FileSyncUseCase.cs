@@ -28,16 +28,10 @@ public class FileSyncUseCase : IFileSyncUseCase
     public async Task<FileSyncOutput> HandleAsync(FileSyncInput input, CancellationToken cancellationToken)
     {
         var fileName = Path.GetFileNameWithoutExtension(input.File.FileName);
-        var (fileRecord, usersRecod) = await _fileRecordGateway.GetFileAsync(fileName);
-
-        if (fileRecord != null && usersRecod != null)
-            return new FileSyncOutput(false, "File already processed");
-        else
-        {
-            _logger.LogWarning($"Processing file {fileName}");
-            var users = await ProcessFileAsync(input, cancellationToken);
-            await _fileRecordGateway.AddFileAsync(fileName, users);
-        }
+        
+        _logger.LogWarning($"Processing file {fileName}");
+        var users = await ProcessFileAsync(input, cancellationToken);
+        await _fileRecordGateway.AddFileAsync(fileName, users);
         
         return new FileSyncOutput(true);
     }

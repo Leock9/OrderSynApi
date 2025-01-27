@@ -6,16 +6,16 @@ const fileData = open('file-to-upload.txt', 'b');
 
 export let options = {
     stages: [
-        { duration: '30s', target: 50 }, // 10 usuários em 30 segundos
-        { duration: '30s', target: 100 }, // 100 usuários em 1 minuto
-        { duration: '30s', target: 0 },  // diminuir para 0 usuários em 30 segundos
+        { duration: '30s', target: 100 }, 
+        { duration: '30s', target: 200 }, 
+        { duration: '30s', target: 50 },
     ],
 };
 
 export default function () {
     sleep(1);
     group('File Sync Endpoint Test', function () {
-        const url = 'http://ordersyncapi:8080/file/sync';
+        const url = 'http://nginx/file/sync'; // Atualizado para usar Nginx
 
         const payload = {
             file: http.file(fileData, 'file-to-upload.txt', 'text/plain'),
@@ -32,7 +32,7 @@ export default function () {
         for (let i = 0; i < maxRetries; i++) {
             fileSyncResponse = http.post(url, payload, { headers });
 
-            if (fileSyncResponse.status !== 429) break; 
+            if (fileSyncResponse.status !== 429) break;
 
             console.warn(`Rate limit exceeded. Retrying in ${retryDelay}s...`);
             sleep(retryDelay); // Espera antes de tentar novamente
@@ -41,7 +41,7 @@ export default function () {
 
         if (fileSyncResponse.status === 429) {
             console.error('Max retries reached. Still hitting rate limit.');
-            return; 
+            return;
         }
 
         check(fileSyncResponse, {
@@ -59,8 +59,8 @@ export default function () {
         sleep(1);
     });
 
-    group('Get File Endpoint Test', function () {
-        const url = 'http://ordersyncapi:8080/file?fileName=data_1';
+    group('Get File Endpoint Test 1', function () {
+        const url = 'http://nginx/file?fileName=data_1'; // Atualizado para usar Nginx
         let fileGetResponse;
 
         try {
@@ -72,7 +72,7 @@ export default function () {
 
         if (!fileGetResponse || !fileGetResponse.body) {
             console.error(`Response from ${url} is null or has no body.`);
-            return; // Aborta o teste, já que não há dados para validar.
+            return;
         }
 
         const validationResult = check(fileGetResponse, {
@@ -95,8 +95,8 @@ export default function () {
         sleep(1);
     });
 
-    group('Get File Endpoint Test', function () {
-        const url = 'http://ordersyncapi:8080/file?fileName=data_2';
+    group('Get File Endpoint Test 2', function () {
+        const url = 'http://nginx/file?fileName=data_2'; // Atualizado para usar Nginx
         let fileGetResponse;
 
         try {
@@ -108,7 +108,7 @@ export default function () {
 
         if (!fileGetResponse || !fileGetResponse.body) {
             console.error(`Response from ${url} is null or has no body.`);
-            return; // Aborta o teste, já que não há dados para validar.
+            return;
         }
 
         const validationResult = check(fileGetResponse, {

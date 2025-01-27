@@ -14,11 +14,6 @@ internal sealed class Endpoint : Endpoint<Request, Response>
         Post("/file/sync");
         Options(o => o.WithName("FileSyncEndpoint"));
         AllowFileUploads();
-
-        // Throttle(
-        //     hitLimit: 120,
-        //     durationSeconds: 60
-        // );
     }
 
     public override async Task HandleAsync(Request r, CancellationToken c)

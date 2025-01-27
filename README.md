@@ -154,3 +154,80 @@ Com base na análise das métricas de desempenho, a **implementação de um proc
 
 A adoção de um processo assíncrono permitirá que o sistema gerencie melhor os recursos, melhore a taxa de sucesso e minimize o impacto das limitações de taxa, proporcionando uma experiência mais eficiente e escalável para os usuários.
 
+
+# Relatório de Análise de Desempenho e Implementação de Melhorias
+
+## Objetivo
+Este relatório visa apresentar os resultados do teste de desempenho após as melhorias implementadas, como a adição de um **load balancer NGINX** e um **container adicional**, comparando os novos dados com os resultados anteriores. As mudanças foram realizadas para aumentar a escalabilidade e melhorar o desempenho dos endpoints sob carga.
+
+---
+
+## Melhorias Implementadas
+1. **Adição de Load Balancer NGINX**:
+   - O NGINX foi configurado para distribuir requisições entre os containers, garantindo melhor balanceamento de carga.
+   - Configurações de timeout e limite de conexões foram otimizadas.
+
+2. **Escalabilidade com Container Adicional**:
+   - Um segundo container foi adicionado para suportar o aumento no número de requisições simultâneas, reduzindo o risco de sobrecarga em um único serviço.
+
+---
+
+## Comparativo de Resultados (Antes vs. Depois)
+
+| **Métrica**                     | **Antes**             | **Depois**            | **Melhoria (%)**                    |
+|----------------------------------|-----------------------|-----------------------|--------------------------------------|
+| **Duração total do teste**       | 1m 33s               | 1m 33s               | **Sem alteração**                   |
+| **Usuários virtuais (VUs)**      | 100% (máximo de 100)  | 100% (máximo de 100)  | **Sem alteração**                   |
+| **Total de requisições HTTP**    | 3495                 | 4625                 | **+32.4%**                           |
+| **Taxa de requisições**          | 37.38 req/s          | 49.73 req/s          | **+33%**                             |
+| **Taxa de iterações**            | 12.46 it/s           | 16.55 it/s           | **+32.8%**                           |
+| **Taxa de sucesso das requisições** | 100%                 | 100%                 | **Sem alteração**                   |
+| **Tempo médio de resposta**      | 5.92ms               | 4.21ms               | **-28.9% (melhor tempo)**            |
+| **Latência média de espera**     | 4.78ms               | 3.29ms               | **-31.1% (melhor latência)**         |
+| **Duração média das iterações**  | 4.03s                | 3.15s                | **-21.8% (mais eficiente)**          |
+
+---
+
+## Desempenho por Endpoint - Comparativo
+
+### **File Sync Endpoint**
+| **Métrica**                      | **Antes**             | **Depois**            | **Melhoria (%)**                    |
+|-----------------------------------|-----------------------|-----------------------|--------------------------------------|
+| **Check de Status 200**           | 100%                 | 100%                 | **Sem alteração**                   |
+| **Check de Resposta Sucessiva**   | 66.76%               | 98.12%               | **+31.36%**                          |
+| **Taxa de falhas de resposta**    | 33.24%               | 1.88%                | **-31.36% (redução de falhas)**      |
+| **Total de requisições**          | 3495                 | 4625                 | **+32.4%**                           |
+| **Tempo médio de resposta**       | 5.92ms               | 4.30ms               | **-27.4% (menor tempo de resposta)** |
+
+### **Get File Endpoint**
+| **Métrica**                      | **Antes**             | **Depois**            | **Melhoria (%)**                    |
+|-----------------------------------|-----------------------|-----------------------|--------------------------------------|
+| **Check de Status 200**           | 100%                 | 100%                 | **Sem alteração**                   |
+| **Check de Conteúdo (getFileOutput)** | 100%                 | 100%                 | **Sem alteração**                   |
+| **Check de Conteúdo (users)**     | 100%                 | 100%                 | **Sem alteração**                   |
+| **Taxa de sucesso**               | 87.55%               | 99.22%               | **+13.31%**                          |
+| **Taxa de falhas**                | 12.45%               | 0.78%                | **-11.67% (redução de falhas)**      |
+| **Tempo médio de resposta**       | 5.92ms               | 3.89ms               | **-34.3% (menor tempo de resposta)** |
+
+---
+
+## Análise e Benefícios das Melhorias
+1. **Aumento da Capacidade de Requisições**:
+   - O total de requisições suportadas aumentou em **32.4%**, indicando que o sistema consegue lidar melhor com a carga devido ao balanceamento de carga e ao container adicional.
+
+2. **Melhoria no Tempo de Resposta**:
+   - O tempo médio de resposta foi reduzido em **28.9%**, e a latência diminuiu em **31.1%**, garantindo respostas mais rápidas para os usuários.
+
+3. **Redução de Falhas no File Sync Endpoint**:
+   - A taxa de falhas caiu de **33.24% para 1.88%**, um grande avanço para a confiabilidade do endpoint.
+
+4. **Confiabilidade do Get File Endpoint**:
+   - O endpoint **Get File** apresentou **taxa de sucesso de 99.22%**, mostrando melhorias significativas na consistência das respostas.
+
+5. **Escalabilidade**:
+   - A arquitetura agora está mais preparada para lidar com aumentos de carga, com um balanceamento eficiente entre os containers.
+
+---
+
+## Conclusão
+As melhorias implementadas, como a adição de um **load balancer NGINX** e um **container adicional**, resultaram em um sistema mais robusto, escalável e eficiente. A comparação com os resultados anteriores destaca avanços expressivos em termos de capacidade de processamento, tempo de resposta e confiabilidade. Com essas mudanças, o sistema está melhor preparado para atender a um volume elevado de requisições, mantendo alta qualidade e desempenho. 

@@ -1,5 +1,6 @@
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using OrderSyncApi;
 using OrderSyncApi.Core.Application.UseCases.FileSync;
 using OrderSyncApi.Core.Application.UseCases.GetFile;
 using OrderSyncApi.Infrastructure.Gateways.Redis;
@@ -64,6 +65,14 @@ app.UseFastEndpoints(c =>
             s.Responses[404] = "Not found.";
             s.Responses[500] = "Internal server error.";
         });
+        
+        ep.PostProcessors(FastEndpoints.Order.After, new GlobalLoggerPostProcces
+        (
+            LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            }).CreateLogger<GlobalLoggerPostProcces>()
+        ));
     };
 });
 
